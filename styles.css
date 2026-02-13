@@ -38,7 +38,7 @@ a{color:inherit}
 }
 .brand{display:flex; gap:12px; align-items:center; min-width:260px}
 .brand__logo{
-  width:160px;
+  width:240px;
   height:auto;
   border-radius:0;
   object-fit:contain;

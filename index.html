@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>PHD Precision Certificate</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img class="brand__logo" src="assets/logo.png" alt="PHD - Precision Home Delivery" />
+      <div class="brand__text">
+        <div class="brand__name">PHD — Precision Home Delivery</div>
+        <div class="brand__sub">Precision Certificate (Offline)</div>
+      </div>
+    </div>
+    <div class="topbar__actions">
+      <button class="btn btn--ghost" id="btnNew">New Job</button>
+      <button class="btn btn--ghost" id="btnImport">Import</button>
+      <button class="btn btn--ghost" id="btnJobs">Jobs</button>
+      <button class="btn btn--primary" id="btnExport">Generate PDF (Print)</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Job Setup</h2>
+
+      <div class="grid">
+        <div class="field">
+          <label>Job Type</label>
+          <select id="jobType">
+            <option value="Retail Customer">Retail Customer</option>
+            <option value="Builder Project">Builder Project</option>
+            <option value="Subcontracted Through Supplier">Subcontracted Through Supplier</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Service Type</label>
+          <select id="serviceType">
+            <option value="Delivery">Delivery</option>
+            <option value="Installation">Installation</option>
+            <option value="Delivery + Installation">Delivery + Installation</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Project Address <span class="req">*</span></label>
+          <input id="address" placeholder="Street address, City" />
+        </div>
+
+        <div class="field">
+          <label>Contact Name</label>
+          <input id="contactName" placeholder="Site manager / homeowner" />
+        </div>
+
+        <div class="field">
+          <label>Contact Phone</label>
+          <input id="contactPhone" placeholder="(204) 555-1234 ext. 201" />
+        </div>
+
+        <div class="field">
+          <label>Scheduled Date/Time</label>
+          <input id="scheduledDT" placeholder="Fri Feb 13, 10:00 AM" />
+        </div>
+
+        <div class="field" id="builderWrap">
+          <label>Builder</label>
+          <input id="builderName" placeholder="Builder name (if applicable)" />
+        </div>
+
+        <div class="field" id="contractedWrap">
+          <label>Contracted Through</label>
+          <input id="contractedThrough" placeholder="Serenity / Wiens / Stalwart / etc." />
+        </div>
+
+        <div class="field">
+          <label>Company Email (for reference)</label>
+          <input id="companyEmail" placeholder="joel@wiensfurniture.ca" />
+          <div class="help">Optional: store who sent the job / who you report back to.</div>
+        </div>
+
+        <div class="field">
+          <label>Start/Finish</label>
+          <div class="row">
+            <button class="btn btn--secondary" id="btnStart">Start Job (GPS + Time)</button>
+            <button class="btn btn--secondary" id="btnFinish">Finish Job (Time)</button>
+          </div>
+          <div class="help" id="stampPreview">Not started</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row row--between">
+        <h2>Appliances</h2>
+        <button class="btn btn--primary" id="btnAddAppliance">Add Appliance</button>
+      </div>
+
+      <div id="applianceList" class="stack"></div>
+
+      <div class="muted">
+        Tip: Use <strong>Import</strong> to paste email text or take a photo of a work order, then confirm fields.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Sign-off</h2>
+
+      <div class="grid">
+        <div class="field">
+          <label>Site Representative</label>
+          <select id="repRole">
+            <option value="Site Manager">Site Manager</option>
+            <option value="Builder Representative">Builder Representative</option>
+            <option value="Homeowner">Homeowner</option>
+            <option value="No Representative Present">No Representative Present</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Representative Name</label>
+          <input id="repName" placeholder="Printed name (if present)" />
+        </div>
+
+        <div class="field">
+          <label>Installer Name</label>
+          <input id="installerName" placeholder="Your name" value="Greg (PHD)" />
+        </div>
+      </div>
+
+      <div class="sig-wrap">
+        <div class="sig">
+          <div class="sig__label">Signature – Service Confirmation</div>
+          <canvas id="sigCanvas" width="900" height="240"></canvas>
+          <div class="row">
+            <button class="btn btn--ghost" id="btnSigClear">Clear</button>
+            <div class="help">“Signature confirming delivery and/or installation.”</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row row--between">
+        <div class="help">
+          Jobs are stored offline on your device. Use “Jobs” to load and continue later.
+        </div>
+        <button class="btn btn--primary" id="btnSave">Save Job</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>Precision Certificate v1 — Offline-first. Export uses your device Print to PDF.</div>
+      <div class="footer__right"><button class="btn btn--ghost" id="btnInstallHint">Install App</button></div>
+    </footer>
+  </main>
+
+  <!-- Import modal -->
+  <dialog id="importDlg" class="dlg">
+    <form method="dialog" class="dlg__panel">
+      <div class="dlg__head">
+        <h3>Import Job Info</h3>
+        <button class="btn btn--ghost" value="cancel">Close</button>
+      </div>
+
+      <div class="tabs">
+        <button type="button" class="tab tab--active" data-tab="paste">Paste Email/Text</button>
+        <button type="button" class="tab" data-tab="photo">Photo / Screenshot</button>
+      </div>
+
+      <div class="tabpane tabpane--active" data-pane="paste">
+        <div class="field">
+          <label>Paste the email text here</label>
+          <textarea id="importText" rows="10" placeholder="Paste email content..."></textarea>
+          <div class="help">We’ll auto-detect address, time, phone numbers, model numbers, and appliance words. You can edit before applying.</div>
+        </div>
+        <div class="row row--between">
+          <button type="button" class="btn btn--secondary" id="btnParseText">Parse</button>
+          <button type="button" class="btn btn--primary" id="btnApplyImport">Apply to Job</button>
+        </div>
+        <div class="card-lite">
+          <div class="muted">Detected Fields (preview)</div>
+          <pre id="importPreview" class="pre"></pre>
+        </div>
+      </div>
+
+      <div class="tabpane" data-pane="photo">
+        <div class="field">
+          <label>Take a photo / pick an image of the work order</label>
+          <input type="file" id="importImage" accept="image/*" capture="environment" />
+          <div class="help">v1 stores the image with the job. OCR is optional later; for now, keep it as attached proof and manually fill key fields.</div>
+        </div>
+        <div id="importImagePreview" class="imgprev"></div>
+        <div class="row row--between">
+          <button type="button" class="btn btn--secondary" id="btnAttachImage">Attach to Job</button>
+          <button class="btn btn--primary" value="cancel">Done</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Jobs modal -->
+  <dialog id="jobsDlg" class="dlg">
+    <form method="dialog" class="dlg__panel">
+      <div class="dlg__head">
+        <h3>Saved Jobs</h3>
+        <button class="btn btn--ghost" value="cancel">Close</button>
+      </div>
+      <div id="jobsList" class="jobs"></div>
+      <div class="row row--between">
+        <button type="button" class="btn btn--ghost" id="btnDeleteAll">Delete All Jobs</button>
+        <button class="btn btn--primary" value="cancel">Done</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

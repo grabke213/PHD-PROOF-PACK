@@ -37,7 +37,13 @@ a{color:inherit}
   border-bottom:1px solid var(--line);
 }
 .brand{display:flex; gap:12px; align-items:center; min-width:260px}
-.brand__logo{width:44px;height:44px;border-radius:14px;object-fit:cover; border:1px solid rgba(255,255,255,.12); box-shadow: var(--shadow);}
+.brand__logo{
+  width:160px;
+  height:auto;
+  border-radius:0;
+  object-fit:contain;
+  border:none;
+}
 .brand__name{font-weight:800; letter-spacing:.2px}
 .brand__sub{color:var(--muted); font-size:12px; margin-top:2px}
 .topbar__actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}

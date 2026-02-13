@@ -186,6 +186,7 @@ function deliveryChecklist(type){
     "Path protection used where required",
     "Unit placed in requested location",
     "Placement photo captured",
+    "Delivery deferred (see reason below)",
   ];
   const byType = {
     "Fridge": ["Doors protected during move", "Power cord secured"],

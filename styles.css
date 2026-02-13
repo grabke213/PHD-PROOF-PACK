@@ -36,7 +36,11 @@ a{color:inherit}
   backdrop-filter: blur(8px);
   border-bottom:1px solid var(--line);
 }
-.brand{display:flex; gap:12px; align-items:center; min-width:260px}
+.brand{
+    display:flex;
+    gap:20px;
+    align-items:center;
+}
 .brand__logo{
   width:240px;
   height:auto;
